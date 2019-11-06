@@ -181,5 +181,15 @@ funtionname(){
 }
 ```
 
+### 常用命令 ###
+
+```python
+cd, ls, mkdir, touch, mv, cp, pwd, tree, rm, rm -rf, ps, ps -aux, kill, kill -9, ifconfig, cat, vi, less, more, find, find filename -type d, df -h, netstat -tln, netstat
+cd /.
+cd ..
+# 有些命令包含一些参数。
+```
+
+参考： https://blog.csdn.net/ljianhui/article/details/11100625 
 
 
