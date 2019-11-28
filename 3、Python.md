@@ -1019,6 +1019,8 @@ sys.setrecursionlimit(2000)
 
 参考：https://blog.csdn.net/weixin_40907382/article/details/80277152
 
+关于在子类中调用父类的方法，使用`super().functionname()`方法可以调用父类的方法！
+
 #### **103、`isinstance` 作用以及应用场景？** ####
 
 ```python
@@ -1531,13 +1533,17 @@ TCP/IP协议集包括应用层,传输层，网络层，网络访问层。
 
 参考：https://blog.csdn.net/SQA_STAR/article/details/81037781 
 
-#### **162、进程之间如何通信**  ####
+#### **162、进程之间如何通信**。  ####
 
+进程通信指进程之间的信息互相交换。
 
+参考： https://juejin.im/post/5b909658e51d450e7825d066 
 
 #### **163、IO 多路复用的作用？**   ####
 
+IO的多路复用用于提升效率，单个进程可以同时监听多个网络连接IO。
 
+ https://www.cnblogs.com/apollo1616/p/10205951.html 
 
 #### **164、`select`、`poll`、`epoll` 模型的区别？**   ####
 
@@ -1549,7 +1555,7 @@ TCP/IP协议集包括应用层,传输层，网络层，网络访问层。
 
 #### **168、`threading.local` 的作用？**  ####
 
-
+这个方法用来保存一个全局变量，但是这个变量只有在当前的线程才可以访问，如果再开发多线程应用的时候需要每个线程保存一个单独的数据供当前线程操作，可以考虑使用这个方法。例子：...
 
 ## 十一、Git ##
 
@@ -1560,10 +1566,11 @@ TCP/IP协议集包括应用层,传输层，网络层，网络访问层。
 包括问题170。
 
 ```
-git pull 
-git add 
-git push 
+git pull # 拉取
+git add # 添加文件
+git push # 推送同步
 ```
 
 #### **170、git 如何查看某次提交修改的内容x**  ####
 
+使用 git log 来查看历史提交记录。然后使用git show <commit-hashId>查看某次提交的内容。同样使用 git show <commit-hashId> filename 可以显示出某次提交的某个内容的修改信息。
