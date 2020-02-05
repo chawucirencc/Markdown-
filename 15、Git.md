@@ -2,7 +2,9 @@
 
 进入目标文件夹右键选择Git Bash Here:
 
-参考： https://www.cnblogs.com/sdcs/p/8270029.html 
+为本地文件夹创建一个新的项目，参考： https://www.cnblogs.com/sdcs/p/8270029.html 
+
+关于将本地文件夹和一个远程仓库进行关联，参考：https://www.cnblogs.com/alinainai/p/11080655.html
 
 ```python
 git init # 初始化文件夹，会创建一个.git的隐藏文件夹

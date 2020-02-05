@@ -19,6 +19,8 @@ Django 在Windows 上的安装，先需要有 Python 的环境，具体不在赘
 
 ### Flask ###
 
+在VScode中开启debug模式之后服务不会启动！暂时未解决。
+
 ##### 基础 #####
 
 Flask是用Python编写的一个轻量级的web应用框架，Flask基于Werkzeug WSGI工具包和Jinja2模板引擎。两者都是Pocco项目。Flask仅仅保留了程序的核心模块，而对于其他的功能都是通过添加扩展来实现的。
@@ -94,6 +96,61 @@ if name == 'main':
 通过一个判断来选择函数，在上面的代码中存在一些问题，开启服务之后，在URL中添加变量部分，可能会显示404，可能的原因是`'/user/'`部分缺少一个参数，如果添加了参数之后判断的第二部分就不会执行，只会执行判断的前半部分。
 
 ##### HTTP方法 #####
+
+`http`协议是网络通信中数据通信的基础，默认的情况下，Flask路由响应的是GET请求。可以通过`route()`装饰器提供的方法参数来改变这个选项。如下：
+
+```python
+@app.route('/login/', methods=["POST", "GET"])
+def login():
+    if request.method == 'POST': # 第一次编写的时候此处有问题。
+        user = request.form['nm'] # 第一次编写的时候此处有问题。
+        return redirect(url_for('success', name=user))
+    else:
+        user = request.args.get('nm')
+        return redirect(url_for('success', name=user))
+```
+
+在第一行的时候，使用方法参数改变默认的请求方法。需要另外一个`html`表单文件来将输入的文本传输到URL中。
+
+```html
+<html>
+   <body>
+      <form action = "http://localhost:5000/login" method = "post">
+         <p>Enter Name:</p>
+         <p><input type = "text" name = "nm" /></p>
+         <p><input type = "submit" value = "submit" /></p>
+      </form>
+   </body>
+</html>
+```
+
+先开启路由服务，然后在浏览器中打开`html`脚本文件，输入文本点击提交，会跳转到服务中的URL显示函数中的内容。
+
+##### 模板 #####
+
+使用Python代码来生成HTML文件很麻烦，尤其是需要放置数据变量和Python的语言元素的时候，这时候需要从HTML中转义。可以利用Flask中的jinja2末班引擎。通过使用`render_template()`函数呈现HTML文件。在这里遇到了一个问题，在URL地址的地方少写了一个参数，导致网页一直显示的是404，需要在URL地址中多添加一个参数。如下：
+
+```python
+@app.route('/hello/<user>')
+def index(user):
+    # user = 'www.baidu.com'
+    return render_template('index.html', name = user)
+    # return 'hello'
+-----------------------------------------------------------------
+# 以下为HTML的测试代码。
+<!doctype html>
+
+  <h1>Hello {{ name }}!</h1>
+-----------------------------------------------------------------
+{{ }}用于表达式可以打印到输出模板。
+{%...%}用于语句，比如if...else
+{#...#} 用于在模板中的注释。
+#...### 用于行语句。
+```
+
+在添加参数的时候，如果是`int`则仅仅只是42即可，如果是`float`则需要输入42.0才能识别出来。
+
+##### 静态文件 #####
 
 
 
