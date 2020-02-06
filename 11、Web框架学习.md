@@ -152,6 +152,99 @@ def index(user):
 
 ##### 静态文件 #####
 
+在Flask项目中static文件夹中存放的就是静态文件，通常包括JavaScript文件和一些支持网页显示样式的CSS文件。这些静态文件都是从static文件夹中加载出来的。可以在HTML脚本中加载一个简单的js文件。如下：
+
+```html
+# hello.html
+<html>
+   <head>
+      <script type = "text/javascript" 
+         src = "{{ url_for('static', filename = 'hello.js') }}" ></script>
+   </head>
+   <body>
+      <input type = "button" onclick = "sayHello()" value = "Say Hello" />
+   </body>
+</html>
+```
+
+```javascript
+# htllo.js
+function sayHello() {
+   alert("Hello World")
+}
+```
+
+此时还需要开启一个服务，同之前一样。
+
+##### Request对象 #####
+
+来自客户端网页的数据作为全局对象被发送到服务器，为了处理请求数据，需要导入Request模块。Request对象的重要属性如下：
+
+-   **Form** - 它是一个字典对象，包含表单参数及其值的键和值对。
+-   **args** - 解析查询字符串的内容，它是问号（？）之后的URL的一部分。
+-   **Cookies** - 保存Cookie名称和值的字典对象。
+-   **files** - 与上传文件有关的数据。
+-   **method** - 当前请求方法。
+
+##### 将表单数据发送到模板 #####
+
+表单：在HTML中，表单用于搜集不同类型的用户输入。而表单元素指不同类型的input元素，复选框，单选按钮和提交按钮等。使用表单的提交按钮之后会将数据放在URL中返回给服务器（form中action参数的服务器），然后由服务器判断之后再返回一个HTML页面，返回最终的结果。代码如下：
+
+```python
+@app.route('/')
+def student():
+    return render_template('students.html')
+
+
+@app.route('/result', methods=['GET', 'POST'])
+def res():
+    # result={'Name':'Job', 'Physics':99, 'chemistry':99, 'Mathematics':90}
+    # result=[1, 2, 0, 3, 4]
+    if request.method == 'POST':
+        result=request.form
+        return render_template('result.html', result=result)
+    # return render_template('result.html', result=result)
+    # 注释的代码为测试用、
+```
+
+```html
+# result.html
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Result</title>
+</head>
+<body>
+    {% for key, value in result.items() %}
+        {{ key }}<br>
+        {{ value }}<br>
+    {% endfor %}
+</body>
+</html>
+----------------------------------------------------------------------------
+# students.html
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form action="http://127.0.0.1:5000/result", method="POST">
+        <p>Name <input type = "text" name = "Name" /></p>
+        <p>Physics <input type = "text" name = "Physics" /></p>
+        <p>Chemistry <input type = "text" name = "chemistry" /></p>
+        <p>Maths <input type ="text" name = "Mathematics" /></p>
+        <p><input type = "submit" value = "submit" /></p>
+    </form>
+</body>
+</html>
+# form作为表单部分收集用户输入的数据。
+```
+
 
 
 
