@@ -245,7 +245,27 @@ def res():
 # form作为表单部分收集用户输入的数据。
 ```
 
+在获取表单的数据和请求方式的时候需要使用`request`模块，可以直接获取到请求方式和数据。使用flash模块将返回的消息放在网页上面，首先需要在HTML写出一个for循环来接收后端传来的消息，使用`get_flashed_messages()`来接收消息。如下：
 
+```html
+<!doctype html>
+<html>
+  <form method="POST">
+    <p>用户名：<input type="text" name="name"></p>
+    <p>密码：<input type="password" name="password"></p>
+    <p>确认密码：<input type="password" name="password2"></p>
+    <p><input type="submit" name="提交"></p>
+    {% for message in get_flashed_messages() %}
+        {{ message }}
+    {% endfor %}
+  </form>
+</hr>
+</html>
+```
 
+语句部分就是用来显示消息的。很重要的一点就是需要在开头的时候写一个`app.secret_key='secret_key'`这个语句来进行加密，否则会报错！另外就是flash显示的编码问题，在py3中编码问题得到了很大的解决，如果是py2的环境，flash需要这样写`flash(u'****')`来解决编码问题。
 
+##### WTF（WTForms） #####
+
+需要先安装`flask-WTF`模块，`pip3 install flask-WTF`。
 
