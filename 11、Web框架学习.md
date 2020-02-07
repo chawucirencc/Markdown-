@@ -265,7 +265,53 @@ def res():
 
 语句部分就是用来显示消息的。很重要的一点就是需要在开头的时候写一个`app.secret_key='secret_key'`这个语句来进行加密，否则会报错！另外就是flash显示的编码问题，在py3中编码问题得到了很大的解决，如果是py2的环境，flash需要这样写`flash(u'****')`来解决编码问题。
 
-##### WTF（WTForms） #####
+##### Flask WTF（WTForms） #####
 
-需要先安装`flask-WTF`模块，`pip3 install flask-WTF`。
+需要先安装`flask-WTF`模块，`pip3 install flask-WTF`。需要载入基类`FlaskForm`，还有表单模块`wtforms`，还需要使用`secret_key`（必不可少）。需要在HTML网页。代码如下：
 
+```html
+# index.html
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+</head>
+<body>
+<form method="POST">
+    {{ form.username.label }}{{ form.username }}
+    {{ form.password.label }}{{ form.password }}
+    {{ form.password2.label }}{{ form.password2 }}
+    {{ form.submit }}
+</form>
+</body>
+</html>
+```
+
+```python
+# app.py
+from flask import Flask, render_template
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+
+app = Flask(__name__)
+app.secret_key = 'secret_key'
+
+class LoginForm(FlaskForm):
+    username = StringField('用户名：')
+    password = PasswordField('密码：')
+    password2 = PasswordField('确认密码：')
+    submit = SubmitField('提交')
+
+
+@app.route('/', methods=['GET', 'POST'])
+def hello_world():
+    login = LoginForm()
+    return render_template('index.html', form=login)
+
+
+if __name__ == '__main__':
+    app.run()
+```
+
+简单地使用WTF来实现一个用户名密码的界面。
