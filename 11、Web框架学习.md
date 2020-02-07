@@ -314,4 +314,11 @@ if __name__ == '__main__':
     app.run()
 ```
 
-简单地使用WTF来实现一个用户名密码的界面。
+简单地使用WTF来实现一个用户名密码的界面。这里还没有使用验证函数。使用验证函数需要先导入模块:
+
+```python
+from wtforms.validators import DataRequired, EqualTo
+
+
+```
+
