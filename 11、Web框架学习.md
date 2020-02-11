@@ -4,7 +4,17 @@ web应用程序框架，表示一个库和模块的集合，使Web应用程序�
 
 ---
 
-### Django
+### 1、Tornado ###
+
+一个由FriendFeed开发的Python Web框架和异步网络库，采用非阻塞网络I/O模型，可以处理数以千计的网络连接。对于long polling、WebSockets和其他需要长时间实时连接的Apps，Tornado是一个理想的Web框架，它介于Django和Flask之间，能很好地处理C10K问题。
+
+
+
+### 2、Socket ###
+
+一个套接字通讯底层库，用于在服务器和客户端间建立TCP或UDP连接，通过连接发送请求与响应。
+
+### 3、Django
 
 Django 是一个开放源代码的 web 应用框架，由 Python 写成。Django采用了 MVC 的软件设计模式，即模型 M，视图 V 和控制器 C 。
 
@@ -17,9 +27,11 @@ Django 在Windows 上的安装，先需要有 Python 的环境，具体不在赘
 
 ---
 
-### Flask ###
+### 4、Flask ###
 
 在VScode中开启debug模式之后服务不会启动！暂时未解决。
+
+在Pycharm中开启debug模式需要在设置中勾选FLASK_DEBUG。
 
 ##### 基础 #####
 
@@ -69,7 +81,7 @@ def show_num(num):
 
 ##### Flask URL的构建 #####
 
-`redirect`和`url_for`组合使用，`url_for()`函数接受一个函数名为第一个参数，以及一个或者多个关键字参数。示例代码：
+`redirect`和`url_for`组合使用，`url_for()`函数接受一个函数名为第一个参数，以及一个或者多个关键字参数。跳转到某个函数。示例代码：
 
 ```python
 from flask import Flask, redirect, url_for
@@ -314,11 +326,55 @@ if __name__ == '__main__':
     app.run()
 ```
 
-简单地使用WTF来实现一个用户名密码的界面。这里还没有使用验证函数。使用验证函数需要先导入模块:
+简单地使用WTF来实现一个用户名密码的界面。在使用WTF框架创建输入表单的时候，还会自动创建CSRF令牌的隐藏字段，这是为了防止跨站请求伪造攻击。这里还没有使用验证函数。使用验证函数需要先导入模块:
 
 ```python
 from wtforms.validators import DataRequired, EqualTo
 
-
+class LoginForm(FlaskForm):
+    username = StringField('用户名：', validators=[DataRequired()])
+    password = PasswordField('密码：', validators=[DataRequired()])
+    password2 = PasswordField('确认密码：', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('提交')
 ```
 
+对上面的类做了相应的优化。添加了一些验证函数。注：在Pycharm中Flask项目如果需要开启debug模式需要在设置中勾选到FLASK_DEBUG。
+
+##### Flask使用数据库 #####
+
+首先需要安装`flask_sqlalchemy`模块。`pip3 insatll flask_sqlalchemy`安装扩展，这个扩展是针对关系型数据库来使用的，然后用下面的两段代码来配置和连接数据库。参考：https://www.cnblogs.com/Sunzz/p/10979970.html，这个扩展是使用ORM对象映射来操作数据库，可以不用写一般的SQL语句。但是在性能上会造成一些损失。
+
+```python
+pip3 insatll flask_sqlalchemy # 安装扩展
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:password@localhost:3306/database_name' # 配置MySQL数据库
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+```
+
+在上面的配置代码中，数据库类型://管理员用户名//密码@端口地址:端口号/数据库名。
+
+关于数据的增删改查，如果是新的数据库，那还需要在MySQL中新建一个数据库才能使用，如果是已经存在的数据库，而且数据库中也已经存在表了。那么就不用新建了，只需要在代码中创建一个实例，然后字段需要和已经存在的表中的字段相同，然后再在路由中执行查询，如下代码：
+
+```python
+# 创建表（已存在的表）
+class Test(db.Model):
+    __tablename__ = 'courses'
+    id = db.Column(db.Integer, primary_key=True)
+    student = db.Column()
+    cl = db.Column()
+    score = db.Column(db.Integer, unique=True)
+
+    def __repr__(self):
+        return 'OK!'
+    
+@app.route('/sql', methods=['GET', 'POST'])
+def flask_sql():
+    data = Test.query.all()
+    print(data)
+    return 'success'
+```
+
+创建新表和上面的代码类似。
+
+关于数据库中的关系引用：写在一的一方，在另外一个模型（表）中使用反向引用，`backref`。
+
+待续....
