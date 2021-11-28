@@ -181,4 +181,44 @@ docker search username/ubuntu
 
 用来创建镜像的文本文件，文本内容包含了一条条构建镜像所需的指令和说明。
 
+在空文件夹下面创建Dockerfile文件，添加以下内容：
+
+```
+FROM nginx
+RUN echo '这是一个本地构建的nginx镜像' > /usr/share/nginx/html/index.html
+```
+
+Dockerfile 的指令每执行一次都会在 docker 上新建一层。所以过多无意义的层，会造成镜像膨胀过大。
+
+```
+FROM centos
+RUN yum -y install wget
+RUN wget -O redis.tar.gz "http://download.redis.io/releases/redis-5.0.3.tar.gz"
+RUN tar -xvf redis.tar.gz
+以上会建立三层镜像，使用以下格式进行简化：
+FROM centos
+RUN yum -y install wget \
+    && wget -O redis.tar.gz "http://download.redis.io/releases/redis-5.0.3.tar.gz" \
+    && tar -xvf redis.tar.gz
+使用 && 连接之后就只建立一层镜像。
+```
+
+```
+docker build -t nginx:v3 .
+使用docker build 命令在 Dockerfile 目录下建立新的镜像文件。. 表示当前文件。
+```
+
+###### 6、Docker  Compose
+
+
+
+
+
+
+
+
+
+
+
+
 
