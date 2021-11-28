@@ -150,6 +150,7 @@ docker tag [container id] [container name]:[tag]
 -p :是容器内部端口绑定到指定的主机端口。
 docker run -d -p 5000:5000 training/webapp python app.py # 可以绑定网址和端口
 docker run -d -P --name TestRename training/webapp python app.py # --name为运行的容器重命名
+# -p 3344:80 为将容器内的80端口映射到容器外的3344端口，可以在外部网络访问容器内部署的的内容。（端口暴露）
 docker network create -d bridge test-net # 创建Docker网络
 docker run -itd --name test1 --network test-net ubuntu /bin/bash # 运行容器连接到一个网络
 
@@ -174,10 +175,29 @@ docker login # 登录到docker hub
 docker search [image name] # 查找镜像
 docker push username/ubuntu:18.04 # 推送到账号的仓库
 docker search username/ubuntu
-
 ```
 
-###### 5、Dockerfile
+###### 5、镜像原理
+
+- **联合文件系统：**
+
+以下图各个镜像为例：
+
+![image-20211129003033014](C:\Users\NaOH\AppData\Roaming\Typora\typora-user-images\image-20211129003033014.png)
+
+在各个镜像安装的过程中是分层安装的，所需的基础模块会独立的从云端仓库下载到本地，当`image1`与`image2`有共同的基础模块时，只需要下载一次此基础模块，而`image1`和`image2`会共用此一个基础模块，节省资源。
+
+docker运行在Linux宿主机上，各个镜像共同使用宿主机的Linux内核，而镜像中保留了最基础最小可以使镜像正常运行的必须模块，从而达到资源的最大化利用。
+
+- **镜像的分层理解：**
+
+关于镜像的分层，每个镜像为一个完整的文件，以`ubuntu`和`Nginx`为例，在下载安装时会按照联合系统文件的方式对所需要的基础模块进行处理。当运行某个镜像成为一个容器之后，对其基础模块不能进行改变。
+
+以下图为例：镜像运行后，镜像层被锁定不可更改，容器层可以进行处理和更改，添加其他组件或者添加新内容。而后可以将其更改的内容与之前的镜像层重新打包成为一个新的镜像，新的镜像运行成为容器之后与下图原理相同。
+
+![preview](https://pic2.zhimg.com/v2-9a820d824e1ddbf73d5643cece9ba421_r.jpg)
+
+### 6、Dockerfile
 
 用来创建镜像的文本文件，文本内容包含了一条条构建镜像所需的指令和说明。
 
@@ -208,9 +228,68 @@ docker build -t nginx:v3 .
 使用docker build 命令在 Dockerfile 目录下建立新的镜像文件。. 表示当前文件。
 ```
 
-###### 6、Docker  Compose
+### 7、Docker  Compose
 
-Docker-Compose项目是Docker官方的开源项目，负责实现对Docker容器集群的快速编排。
+Docker-Compose项目是Docker官方的开源项目，负责实现对Docker容器集群的快速编排。使用Docker-Compose的步骤：
+
+- 使用 Dockerfile 定义应用程序的环境
+- 使用 docker-compose.yml 定义构成应用程序的服务，这样它们可以在隔离环境中一起运行。
+- 最后，执行 docker-compose up 命令来启动并运行整个应用程序。
+
+```
+# 安装
+$ sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+# 将可执行权限应用于二进制文件
+$ sudo chmod +x /usr/local/bin/docker-compose
+# 创建软连接
+$ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+# 测试是否连接成功
+$ docker-compose --version
+docker-compose version 1.24.1, build 4667896b
+# 以此为例启动docker-compose
+https://www.runoob.com/docker/docker-compose.html
+其中需要依赖GCC，需要先安装GCC.
+docker-compose up
+docker-compose -d # 后台运行
+```
+
+### 8、Docker Machine
+
+Docker Machine 是一种可以让您在虚拟主机上安装 Docker 的工具，并可以使用 docker-machine 命令来管理主机。Docker Machine 也可以集中管理所有的 docker 主机，比如快速的给 100 台服务器安装上 docker。Docker Machine 管理的虚拟主机可以是机上的，也可以是云供应商，如阿里云，腾讯云，AWS，或 DigitalOcean。使用 docker-machine 命令，您可以启动，检查，停止和重新启动托管主机，也可以升级 Docker 客户端和守护程序，以及配置 Docker 客户端与您的主机进行通信。
+
+安装
+
+```
+# 使用以下命令安装Docker Machine
+base=https://github.com/docker/machine/releases/download/v0.16.0 &&
+  curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
+  sudo mv /tmp/docker-machine /usr/local/bin/docker-machine &&
+  chmod +x /usr/local/bin/docker-machine
+# 查看版本
+docker-machine version
+# 创建一个虚拟机
+docker-machine create --driver virtualbox test
+
+```
+
+在CentOS上安装VirtualBox参考及相关问题：
+
+```
+https://www.linuxidc.com/Linux/2018-11/155220.htm # 安装
+https://blog.csdn.net/fly_leopard/article/details/93207291 # 无法启动，内核版本不一样。
+```
+
+Docker Machine 已被弃用。请改用 Docker 桌面。请参 阅[Docker Desktop for Mac](https://docs.docker.com/desktop/mac/)和[Docker Desktop for Windows](https://docs.docker.com/desktop/windows/)。还可以使用其他云预配工具。
+
+### 9、Swarm 集群管理
+
+Docker Swarm 是 Docker 的集群管理工具。它将 Docker 主机池转变为单个虚拟 Docker 主机。 Docker Swarm 提供了标准的 Docker API，所有任何已经与 Docker 守护程序通信的工具都可以使用 Swarm 轻松地扩展到多个主机。
+
+
+
+
+
+
 
 
 
