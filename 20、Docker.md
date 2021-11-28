@@ -210,7 +210,7 @@ docker build -t nginx:v3 .
 
 ###### 6、Docker  Compose
 
-
+Docker-Compose项目是Docker官方的开源项目，负责实现对Docker容器集群的快速编排。
 
 
 
