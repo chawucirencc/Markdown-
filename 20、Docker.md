@@ -100,7 +100,9 @@ Docker 是一个用于开发，交付和运行应用程序的开放平台。Dock
 
 4. Docker Registry仓库：
 
-   Docker仓库用来保存镜像。Docker仓库分为公有和私有。Docker公司提供公有仓库Docker hub,网址：https://hub.docker.com/。我们也可以创建自己私有的仓库。
+   Docker仓库用来保存镜像。Docker仓库分为公有和私有。Docker公司提供公有仓库Docker hub,网址：https://hub.docker.com/。
+   
+   我们也可以创建自己私有的仓库。
 
 ### 4、Docker的安装
 
@@ -133,12 +135,12 @@ docker inspect [docker name] # 返回容器的配置和状态信息
 ###### 2、镜像
 
 ```
-docker rmi
+docker rmi [image id]
 docker images
-
+# 提交更改的镜像
 docker commit -m="has update" -a="runoob" e218edb10161 runoob/ubuntu:v2
 docker commit -m="[update inf]" -a="[auther]" [image id] [image name]:v2
-
+# 修改镜像的tag
 docker tag 860c279d2fec runoob/centos:dev
 docker tag [container id] [container name]:[tag]
 ```
@@ -153,7 +155,7 @@ docker run -d -P --name TestRename training/webapp python app.py # --name为运�
 # -p 3344:80 为将容器内的80端口映射到容器外的3344端口，可以在外部网络访问容器内部署的的内容。（端口暴露）
 docker network create -d bridge test-net # 创建Docker网络
 docker run -itd --name test1 --network test-net ubuntu /bin/bash # 运行容器连接到一个网络
-
+# 在CentOS & Ubuntu中安装ping
 apt-get update
 apt install iputils-ping
 将下列内容添加到宿主机/etc/docker/daemon.json中，后续所有运行的容器DNS都会被配置成为以下内容。
