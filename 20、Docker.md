@@ -197,9 +197,11 @@ docker运行在Linux宿主机上，各个镜像共同使用宿主机的Linux内�
 
 以下图为例：镜像运行后，镜像层被锁定不可更改，容器层可以进行处理和更改，添加其他组件或者添加新内容。而后可以将其更改的内容与之前的镜像层重新打包成为一个新的镜像，新的镜像运行成为容器之后与下图原理相同。
 
-![preview](https://pic2.zhimg.com/v2-9a820d824e1ddbf73d5643cece9ba421_r.jpg)
+![img](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fcdn.learnku.com%2Fuploads%2Fimages%2F202004%2F06%2F29144%2FYdEbT3yHOz.png%21large&refer=http%3A%2F%2Fcdn.learnku.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1640766547&t=be58704f990f6dd35912218288f8f513)
 
-### 6、Dockerfile
+### 6、Docker Volume
+
+### 7、Dockerfile
 
 用来创建镜像的文本文件，文本内容包含了一条条构建镜像所需的指令和说明。
 
@@ -230,7 +232,7 @@ docker build -t nginx:v3 .
 使用docker build 命令在 Dockerfile 目录下建立新的镜像文件。. 表示当前文件。
 ```
 
-### 7、Docker  Compose
+### 8、Docker  Compose
 
 Docker-Compose项目是Docker官方的开源项目，负责实现对Docker容器集群的快速编排。使用Docker-Compose的步骤：
 
@@ -255,7 +257,7 @@ docker-compose up
 docker-compose -d # 后台运行
 ```
 
-### 8、Docker Machine
+### 9、Docker Machine
 
 Docker Machine 是一种可以让您在虚拟主机上安装 Docker 的工具，并可以使用 docker-machine 命令来管理主机。Docker Machine 也可以集中管理所有的 docker 主机，比如快速的给 100 台服务器安装上 docker。Docker Machine 管理的虚拟主机可以是机上的，也可以是云供应商，如阿里云，腾讯云，AWS，或 DigitalOcean。使用 docker-machine 命令，您可以启动，检查，停止和重新启动托管主机，也可以升级 Docker 客户端和守护程序，以及配置 Docker 客户端与您的主机进行通信。
 
@@ -283,7 +285,7 @@ https://blog.csdn.net/fly_leopard/article/details/93207291 # 无法启动，内�
 
 Docker Machine 已被弃用。请改用 Docker 桌面。请参 阅[Docker Desktop for Mac](https://docs.docker.com/desktop/mac/)和[Docker Desktop for Windows](https://docs.docker.com/desktop/windows/)。还可以使用其他云预配工具。
 
-### 9、Swarm 集群管理
+### 10、Swarm 集群管理
 
 Docker Swarm 是 Docker 的集群管理工具。它将 Docker 主机池转变为单个虚拟 Docker 主机。 Docker Swarm 提供了标准的 Docker API，所有任何已经与 Docker 守护程序通信的工具都可以使用 Swarm 轻松地扩展到多个主机。
 
