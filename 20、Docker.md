@@ -185,7 +185,7 @@ docker search username/ubuntu
 
 以下图各个镜像为例：
 
-![image-20211129003033014](C:\Users\NaOH\AppData\Roaming\Typora\typora-user-images\image-20211129003033014.png)
+![img](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2020.cnblogs.com%2Fblog%2F1070925%2F202010%2F1070925-20201007122257922-757623315.png&refer=http%3A%2F%2Fimg2020.cnblogs.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1640767396&t=c3f861e026a51ec80278e7d04f4e33d9)
 
 在各个镜像安装的过程中是分层安装的，所需的基础模块会独立的从云端仓库下载到本地，当`image1`与`image2`有共同的基础模块时，只需要下载一次此基础模块，而`image1`和`image2`会共用此一个基础模块，节省资源。
 
@@ -197,9 +197,13 @@ docker运行在Linux宿主机上，各个镜像共同使用宿主机的Linux内�
 
 以下图为例：镜像运行后，镜像层被锁定不可更改，容器层可以进行处理和更改，添加其他组件或者添加新内容。而后可以将其更改的内容与之前的镜像层重新打包成为一个新的镜像，新的镜像运行成为容器之后与下图原理相同。
 
-![img](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fcdn.learnku.com%2Fuploads%2Fimages%2F202004%2F06%2F29144%2FYdEbT3yHOz.png%21large&refer=http%3A%2F%2Fcdn.learnku.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1640766547&t=be58704f990f6dd35912218288f8f513)
+![img](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimgedu.lagou.com%2F952033-20180526102212000-1205998304.png&refer=http%3A%2F%2Fimgedu.lagou.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1640766960&t=8cf78df1a3b0e1297654608cc4815cc1)
 
 ### 6、Docker Volume
+
+
+
+
 
 ### 7、Dockerfile
 
